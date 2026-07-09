@@ -28,7 +28,7 @@ public class SupportCoursService {
 
 
     public List<SupportCours> findByAffectationId(Long affectationId) {
-        return supportCoursRepository.findByAffectationIdOrderByCreatedAtDesc(affectationId);
+        return supportCoursRepository.findByAffectationIdOrderByCreatedAtDesc(affectationId.intValue());
     }
 
     public void save(SupportCours support, MultipartFile file) throws Exception {

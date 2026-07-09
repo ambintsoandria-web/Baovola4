@@ -12,13 +12,7 @@ import java.util.List;
 @Repository
 public interface SupportCoursRepository extends JpaRepository<SupportCours, Integer>,
         JpaSpecificationExecutor<SupportCours> {
-    @Query("""
-        SELECT s
-        FROM SupportCours s
-        WHERE s.affectation.id = :affectationId
-        ORDER BY s.createdAt DESC
-    """)
-    List<SupportCours> findByAffectationIdOrderByCreatedAtDesc(@Param("affectationId") Long affectationId);
+    List<SupportCours> findByAffectationIdOrderByCreatedAtDesc(Integer affectationId);
 
     @Query("""
         SELECT DISTINCT s
