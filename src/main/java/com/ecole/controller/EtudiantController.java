@@ -25,6 +25,7 @@ import com.ecole.entity.Lecon;
 import com.ecole.entity.Note;
 import com.ecole.entity.Periode;
 import com.ecole.entity.ProfilEtudiant;
+import com.ecole.entity.SupportCours;
 import com.ecole.entity.User;
 import com.ecole.entity.EmploiDuTemps;
 import com.ecole.repository.CoefficientRepository;
@@ -38,6 +39,7 @@ import com.ecole.repository.ClasseRepository;
 import com.ecole.service.UserService;
 import com.ecole.service.ProfilEtudiantService;
 import com.ecole.repository.EmploiDuTempsRepository;
+import com.ecole.repository.SupportCoursRepository;
 import jakarta.servlet.http.HttpSession;
 
 @Controller
@@ -54,6 +56,7 @@ public class EtudiantController {
     @Autowired public PeriodeRepository periodeRepository;  
     @Autowired public ProfilEtudiantService profilEtudiantService;
     @Autowired public EmploiDuTempsRepository emploiDuTempsRepository;
+    @Autowired public SupportCoursRepository supportCoursRepository;
 
     private static final List<String> NOMS_JOURS =
             List.of("Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi", "Dimanche");
@@ -297,16 +300,14 @@ public class EtudiantController {
 
         List<Inscription> inscriptions = inscriptionRepository.findActiveByEtudiant(profilEtudiant.getId());
         Long classeId = inscriptions.isEmpty() ? null : inscriptions.get(0).getClasseId();
-
-        List<Devoir> devoirs = List.of();
-        List<Lecon> lecons = List.of();
+        List<SupportCours> supports = List.of();
+       
         try {
             if (classeId != null) {
-                devoirs = devoirRepository.findByClasse(classeId);
-                lecons = leconRepository.findByClasseId(classeId);
+                 supports = supportCoursRepository.findByClasse(classeId);
             }
         } catch (Exception e) {
-            // Log the exception and continue with empty lists
+           
             e.printStackTrace();
         }
 
@@ -314,8 +315,8 @@ public class EtudiantController {
         model.addAttribute("currentRole", "etudiant");
         model.addAttribute("user", null);
         model.addAttribute("profilEtudiant", profilEtudiant);
-        model.addAttribute("devoirs", devoirs);
-        model.addAttribute("lecons", lecons);
+        model.addAttribute("supports", supports);
+        
         return "Etudiant/devoirs";
     }
 
